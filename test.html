@@ -1,0 +1,40 @@
+<!--This file is a test file for your convenience.
+    It makes a request to the variable query_url and displays the base64 encoded image result. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <img id="map">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+        var query_url = "http://localhost:4567/raster";
+        $.get({
+            async: false,
+            url: query_url,
+            data: { h: 944.0,
+                    lrlat: 37.83495035769344,
+                    lrlon: -122.2119140625,
+                    ullat: 37.88746545843562,
+                    ullon: -122.2591326176749,
+                    w: 929.0
+                   },
+            success: function(data) {
+                map.src = "data:image/png;base64," + data.b64_encoded_image_data;
+            },
+            dataType: "json"
+        });
+    </script>
+</head>
+<body>
+<p>
+    {lrlon=-122.2119140625, w=929.0, ullon=-122.2591326176749, h=944.0, ullat=37.88746545843562, lrlat=37.83495035769344}.
+
+    {lrlon=-122.2119140625, w=929.0, ullon=-122.2591326176749, h=944.0, ullat=37.88746545843562, lrlat=37.83495035769344}.
+
+    Expected: {raster_ul_lon=-122.266845703125, raster_height=1792, depth=3,
+    raster_lr_lon=-122.2119140625, raster_lr_lat=37.83147657274216,
+    raster_ul_lat=37.892195547244356, query_success=true, raster_width=1280}
+    but got: {raster_ul_lon=-122.266845703125, depth=3, raster_height=1792, raster_lr_lon=-122.222900390625, raster_lr_lat=37.83147657274216, raster_ul_lat=37.892195547244356, query_success=true, raster_width=1024}.
+</body>
+</html>
