@@ -6,7 +6,6 @@ import java.util.List;
 
 /* Maven is used to pull in these dependencies. */
 import com.google.gson.Gson;
-import sun.awt.image.ImageWatched;
 
 import javax.imageio.ImageIO;
 
@@ -212,12 +211,8 @@ public class MapServer {
         double startBottom = params.get("lrlat");
         double startRight = params.get("lrlon");
         QuadTree quadTree = new QuadTree(ROOT_ULLON, ROOT_ULLAT, ROOT_LRLON, ROOT_LRLAT);
-        //smaller than left, greater than right
-        //smaller than top, greater than bottom
         double QueryDPP = Math.abs((params.get("lrlon")-params.get("ullon")))/params.get("w");
         double heightPerPixelNeeded = Math.abs(startTop - startBottom)/ params.get("h");
-        //int depth = quadTree.depth(widthPerPixelNeeded, TILE_SIZE);
-
         int depth = 0;
         double TileDPP = Math.abs((ROOT_LRLON - ROOT_ULLON)) / (Math.pow(2.0,depth) * TILE_SIZE);
 
@@ -230,8 +225,6 @@ public class MapServer {
         }
 
         PriorityQueue<Node> splitImages = quadTree.rastedImages(startLeft, startTop, startRight, startBottom, depth);
-        //System.out.println(splitImages.size());
-
         double Y1 = splitImages.peek().qtn.top;
         double Y2 = splitImages.peek().qtn.bottom;
         double X1 = splitImages.peek().qtn.left;
@@ -246,49 +239,37 @@ public class MapServer {
         double tW = Math.abs(ROOT_LRLON - ROOT_ULLON) / Math.pow(2,depth);
         int width = ((int)  Math.ceil((Math.abs(X1 - X2) / tW)));
         int height =splitImages.size() / width;
-        //int height = (int) Math.ceil(Math.abs(Y1 - Y2) / tH);
-
-        //int height = (int) (Math.abs(Y1 - Y2) / tH);
         if(height == 0){
             height = 1;
         }
 
-        //int width = ((int) (Math.abs(X1 - X2) / tW));
-
-        //System.out.print(depth);
         try {
             int x = 0; int y = 0;
             BufferedImage result = new BufferedImage(width * TILE_SIZE,  height * TILE_SIZE, BufferedImage.TYPE_INT_RGB );
             Graphics g = result.getGraphics();
             while (!splitImages.isEmpty()) {
                 Node n = splitImages.poll();
-                //System.out.println(n.qtn.fileImage);
                 BufferedImage bi = ImageIO.read(n.qtn.theData);
                 g.drawImage(bi, x, y, null);
                 x += 256;
                 if (x > result.getWidth() - 1) {
-                    //System.out.println("New line");
                     x = 0;
                     y += bi.getHeight();
                 }
             }
             ((Graphics2D) g).setStroke(new BasicStroke(MapServer.ROUTE_STROKE_WIDTH_PX, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             ((Graphics2D) g).setColor(MapServer.ROUTE_STROKE_COLOR);
-            //X1 = "raster_ul_lon", Y1 = "raster_ul_lat"
             if(currentRoute != null) {
                 if (!(currentRoute.size() < 2)) {
                     Long l = currentRoute.getFirst();
                     for (int i = 1; i < currentRoute.size(); i++) {
                         GraphNode start = g1.hashMap.get(l);
                         GraphNode end = g1.hashMap.get(currentRoute.get(i));
-//                        if ((start.lon > X1 && start.lon < X2 && start.lat < Y1 && start.lat > Y2) ||
-//                            (end.lon > X1 && end.lon < X2 && end.lat < Y1 && end.lat > Y2)) {
                                 int left = (int) ((start.lon - X1) / QueryDPP);
                                 int top = (int) ((Y1 - start.lat ) / heightPerPixelNeeded);
                                 int right = (int) ((end.lon - X1) / QueryDPP);
                                 int bottom = (int) ((Y1 - end.lat) / heightPerPixelNeeded);
                                 g.drawLine(left, top, right, bottom);
-                        //}
                         l = end.id;
 
                     }
@@ -296,13 +277,9 @@ public class MapServer {
             }
 
             ImageIO.write(result,"png",os);
-            //System.out.println(result);
         } catch (IOException e) {
             System.out.println("File wasn't found, must have fucked up");
         }
-//        System.out.println("{"+"depth:" + depth + ",raster_ul_lon:"+ X1 + ",raster_ul_lat:"
-//                + Y1 + ",raster_lr_lon:" + X2+",raster_lr_lat:" + Y2 + ",raster_width:"
-//                + TILE_SIZE * width + ",raster_height:" + TILE_SIZE * height +"}");
         rasteredImageParams.put("depth", depth);
         rasteredImageParams.put("raster_ul_lon", X1);
         rasteredImageParams.put("raster_ul_lat", Y1);

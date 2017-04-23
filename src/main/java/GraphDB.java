@@ -48,25 +48,16 @@ public class GraphDB {
             }
 
         }
-        //System.out.println(minEuclidDist);
         return closest;
     }
 
     public LinkedList<Long> shortestPath(double startLat, double startLon, double endLat, double endLon) {
-        //Graph
-//        System.out.println(startLat + "startlat:startlong:" + startLon);
-//        System.out.println(hashMap.get(Long.valueOf(760706748)).lat + ":lat, lon:" + hashMap.get(Long.valueOf(760706748)).lon);
-//        System.out.println(hashMap.get(3178363965L).lat + ":lat, lon:" + hashMap.get(Long.valueOf(3178363965L)).lon);
-
         GraphNode start = closestNode(startLat, startLon);
-        //GraphNode start = hashMap.get(Long.valueOf(760706748));
         GraphNode end = closestNode(endLat, endLon);
         Connector connector = new Connector(start, end, hashMap);
 
 
         LinkedList<Long> shortestPath = connector.aStar();
-        //System.out.println(start.id);
-        //System.out.println(end.id);
         return shortestPath;
     }
 

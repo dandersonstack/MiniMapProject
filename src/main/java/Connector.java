@@ -20,7 +20,6 @@ public class Connector {
             graphNode = gN;
         }
 
-        //if (c not in dist) or (dist(c) > dist(v) + edge(v, c)):
         public double getPriority() {
             return distanceFromStart + Connector.euclidHeuristic(graphNode, finish);
         }
@@ -118,12 +117,8 @@ public class Connector {
         }
 
         LinkedList<Long> path = new LinkedList<Long>();
-
-//        path.add(Long.valueOf(start.id));
-//        path.add(Long.valueOf(finish.id));
         for (GraphNode gn : prevMoves) {
             path.add(Long.valueOf(gn.id));
-            //System.out.println(gn.id);
         }
         return path;
     }

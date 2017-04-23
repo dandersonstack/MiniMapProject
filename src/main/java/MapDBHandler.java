@@ -63,7 +63,6 @@ public class MapDBHandler extends DefaultHandler {
             String nodeIndex = attributes.getValue(0);
             String lat = attributes.getValue(1);
             String lon = attributes.getValue(2);
-            //System.out.println(s);
             GraphNode gn = new GraphNode(nodeIndex,lat,lon);
             if(g.hashSet.add(gn)) {
                 g.hashMap.put(gn.id, gn);
@@ -71,8 +70,6 @@ public class MapDBHandler extends DefaultHandler {
             curr = gn;
         } else if (qName.equals("way")) {
             activeState = "way";
-            //System.out.println("Beginning a way...");
-
         } else if(qName.equals("relation"))  {
             activeState = "relation";
         } else if (activeState.equals("way") && qName.equals("tag")) {
