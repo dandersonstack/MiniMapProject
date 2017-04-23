@@ -29,3 +29,12 @@ and 'src/test/java' directory as test sources root
 4. Do not add the course javalib to your IntelliJ library, it will cause conflicts.
 
 5. Build the project by running MapServer.java, and navigate to localhost:4567
+
+
+#Steps to get it working with command line osx:
+1. brew install maven
+2. mvn compile
+3. mvn exec:java -Dexec.mainClass="MapServer"
+
+To run the tests:
+1.mvn test

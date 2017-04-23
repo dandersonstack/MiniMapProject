@@ -67,9 +67,17 @@ public class MapServer {
      * This is for testing purposes, and you may fail tests otherwise.
      **/
     public static void initialize() {
+        port(getHerokuAssignedPort());
         g1 = new GraphDB(OSM_DB_PATH);
         LinkedList<Long> currRoute = new LinkedList<Long>();
         System.out.println("For testing purposese: in initialize");
+    }
+    private static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
     private static LinkedList<Long> currentRoute;
 
