@@ -22,6 +22,8 @@ public class GraphDB {
      */
     public GraphDB(String db_path) {
         try {
+            // InputStream in = getClass().getClassLoader().getResourceAsStream(dbpath);
+            // sax.parse(in, maphandler);
             File inputFile = new File(db_path);
             hashMap = new HashMap<Long, GraphNode>();
             hashSet = new HashSet<GraphNode>();

@@ -5,15 +5,22 @@ By Daniel Anderson
 
 ### Files that I inherited:
 *MapDBHandler (skeleton)
+
 *MapServer (skeleton)
+
 *TestParams (skeleton)
 
 ### Files Implemented from Scratch:
 *Connector
+
 *GraphDB
+
 *Node
+
 *GraphNode
+
 *QuadTree
+
 *QuadTreeNode
 
 ## Steps to get it working with command line osx:
@@ -31,3 +38,11 @@ and 'src/test/java' directory as test sources root
 
 ## To run the tests:
 1.mvn test
+
+## TODO for Heroku Deployment:
+Overview:
+Build the project, then assembly:assembly creates the jar, and heroku:deploy creates a slug from that jar and pushes it to the heroku repo, and then the webapp can be found at your heroku project's url. if you're missing the maven targets something is up with your project setup
+
+Tasks left:
+- deleted the target folder and built a new project
+- modify a few methods to get my png and berkeley.osm files as resource streams
